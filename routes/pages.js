@@ -9,5 +9,12 @@ router.get('/register', (req, res) => {
     res.render('register');
 })
 
+router.get('/login', (req, res) => {
+    res.render('login');
+})
+
+router.get('/tutorList', (req, res) => {
+    res.render('tutorList');
+})
 
 module.exports = router;

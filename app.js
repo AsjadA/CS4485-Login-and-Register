@@ -20,6 +20,7 @@ app.use(express.urlencoded({extended: false}));
 app.use(express.json())
 
 app.set('view engine', 'hbs');
+app.use('/js', express.static(__dirname + '/public/js', { 'Content-Type': 'application/javascript' }));
 
 db.connect((error) => {
     if (error){

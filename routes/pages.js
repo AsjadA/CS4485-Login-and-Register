@@ -14,7 +14,11 @@ router.get('/login', (req, res) => {
 })
 
 router.get('/tutorList', (req, res) => {
-    res.render('tutorList');
+    res.redirect('tutorList');
+})
+
+router.get('/tutorCriminalCheck', (req, res) => {
+    res.render('tutorCriminalCheck');
 })
 
 module.exports = router;

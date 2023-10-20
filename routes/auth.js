@@ -6,7 +6,9 @@ router.post('/register', authController.register)
 
 router.post('/login', authController.login)
 
-//router.post('/tutorList', authController.tutorList)
+router.post('/tutorCriminalCheck', authController.tutorCriminalCheck)
+
+router.post('/tutorList', authController.tutorList)
 
 
 module.exports = router;

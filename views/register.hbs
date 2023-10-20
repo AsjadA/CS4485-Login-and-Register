@@ -43,6 +43,28 @@
                             Tutor
                         </label>
                     </div>
+                    <div class="form-group" id="tutorAbout" style="display: none;">
+                        <label for="tutorAbout">About me</label>
+                        <input type="text" class="form-control" name="tutorAbout" id="tutorAbout" placeholder="Enter tutor information">
+                    </div>
+                    <div class="form-group" id="tutorSubjects" style="display: none;">
+                        <label for="tutorSubjects">Subject List</label>
+                        <input type="text" class="form-control" name="tutorSubjects" id="tutorSubjects" placeholder="Enter tutor information">
+                    </div>
+                    <div class="form-group" id="tutorDays" style="display: none;">
+                        <label for="tutorDays">Days available</label>
+                        <input type="text" class="form-control" name="tutorDays" id="tutorDays" placeholder="Enter as a comma separated list. Ex: Sunday, Monday,...">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group" id="startTimeContainer" style="display: none;">
+                            <label for="startTime">Start Time</label>
+                            <input type="text" class="form-control" id="startTime" name="startTime" placeholder="Example: 3:00 PM">
+                        </div>
+                        <div class="form-group" id="endTimeContainer" style="display: none;">
+                            <label for="endTime">End Time</label>
+                            <input type="text" class="form-control" id="endTime" name="endTime" placeholder="Example: 5:00 PM">
+                        </div>
+                    </div>
                     <div class="form-group">
                         <label for="email">Email Address</label>
                         <input type="email" class="form-control" id="email" name="email" required>
@@ -68,14 +90,69 @@
 
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-6vwVLFThqHVTcjpGiM94fUjCW365IGE+K9c9vT4ukBr06rQVwJs5kE7mYuGaDwY" crossorigin="anonymous"></script>
+    <script>
+        const tutorRadio = document.getElementById("tutor");
+        const studentRadio = document.getElementById("student");
+        const tutorAbout = document.getElementById("tutorAbout");
+        const tutorSubjects = document.getElementById("tutorSubjects");
+        const tutorDays = document.getElementById("tutorDays");
+        const startTime = document.getElementById("startTimeContainer");
+        const endTime = document.getElementById("endTimeContainer");
+
+        tutorRadio.addEventListener("change", function() {
+            if (tutorRadio.checked) {
+                tutorAbout.style.display = "block";
+                tutorSubjects.style.display = "block";
+                tutorDays.style.display = "block";
+                startTime.style.display = "block";
+                endTime.style.display = "block";
+            } else {
+                tutorAbout.style.display = "none";
+                tutorSubjects.style.display = "none";
+                tutorDays.style.display = "none";
+                startTime.style.display = "none";
+                endTime.style.display = "none";
+            }
+        });
+
+        studentRadio.addEventListener("change", function() {
+            if (studentRadio.checked) {
+                tutorAbout.style.display = "none";
+                tutorSubjects.style.display = "none";
+                tutorDays.style.display = "none";
+                startTime.style.display = "none";
+                endTime.style.display = "none";
+            } else {
+                tutorAbout.style.display = "block";
+                tutorSubjects.style.display = "block";
+                tutorDays.style.display = "block";
+                startTime.style.display = "block";
+                endTime.style.display = "block";
+            }
+        });
+    </script>
 
     <script>
         function validatePassword() {
         var password = document.getElementById("password").value;
+        console.log(password)
+        var startTime = document.getElementById("startTime").value;
+        var endTime = document.getElementById("endTime").value;
         // Check if the password meets the requirements
         if (password.length < 8 || !/[A-Z]/.test(password)) {
             alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
             return false; // Prevent form submission
+        }
+        else{
+            var timeFormat = /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
+            console.log(startTime)
+            console.log(endTime)
+            console.log(!timeFormat.test(startTime))
+            console.log(!timeFormat.test(endTime))
+            if (!timeFormat.test(startTime) || !timeFormat.test(endTime)) {
+                alert("Please enter the time in the format: hh:mm AM/PM");
+                return false;
+            }
         }
 
         return true; // Allow form submission

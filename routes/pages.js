@@ -21,4 +21,17 @@ router.get('/tutorCriminalCheck', (req, res) => {
     res.render('tutorCriminalCheck');
 })
 
+router.get('/twofa', (req, res) => {
+    if(!req.session.username){
+        res.render('login', {message: "Please login to access this page"})
+    }
+    else{
+        res.render('twofa');
+    }
+})
+
+// router.get('/favorites', (req, res) => {
+//     res.render('favorites');
+// })
+
 module.exports = router;

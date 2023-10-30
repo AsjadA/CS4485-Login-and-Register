@@ -109,12 +109,8 @@ exports.login = (req, res) => {
                 console.log(match)
                 if(match){
                     req.session.username = email;
-                    return res.render('index'
-                    // , {
-                    //     email: email,
-                    //     name: results[0].Name
-                    // }
-                    );
+                    res.locals.username = req.session.username;
+                    return res.render('twofa', {type: 'tutor'});
                 } else {
                     return res.render('login', {
                         message: 'Invalid password'
@@ -130,7 +126,9 @@ exports.login = (req, res) => {
             console.log(match)
             if(match){
                 req.session.username = email;
-                return res.redirect('tutorList');
+                res.locals.username = req.session.username;
+                return res.render('twofa', {type: 'student'})
+                // return res.redirect('tutorList');
             } else {
                 return res.render('login', {
                     message: 'Invalid password'
@@ -181,4 +179,16 @@ exports.tutorCriminalCheck = (req, res) => {
 exports.tutorList = (req, res) => {
     console.log(req.body);
 
+}
+
+exports.twofa = (req, res) => {
+    console.log(req.body)
+    console.log(req.session.username)
+    if(req.body.type == 'student'){
+        return res.redirect('tutorList')
+    }
+    else{
+        return res.render('index')
+    }
+    
 }

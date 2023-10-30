@@ -135,6 +135,7 @@
     <script>
         function validatePassword() {
         var password = document.getElementById("password").value;
+        var type = document.getElementById("type").value;
         console.log(password)
         var startTime = document.getElementById("startTime").value;
         var endTime = document.getElementById("endTime").value;
@@ -143,7 +144,7 @@
             alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
             return false; // Prevent form submission
         }
-        else{
+        else if(type == 'tutor'){
             var timeFormat = /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
             console.log(startTime)
             console.log(endTime)

@@ -12,5 +12,6 @@ router.post('/tutorList', authController.tutorList)
 
 router.post('/twofa', authController.twofa)
 
+router.post('/appointment', authController.appointment)
 
 module.exports = router;

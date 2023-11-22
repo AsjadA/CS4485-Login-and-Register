@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/appointment.css">
+        <title>TE</title>
+    </head>
+    
+    <body>
+        <nav>
+            <h4><a href="/">Tutoring Everywhere</a></h4>
+            <ul>
+                <li><a href="/userProfile">Profile</a></li>
+                <li><a href="/favorites">Favorite Tutors</a></li>
+                <li><a href="/auth/tutorList">All Tutors</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+        
+        <div class="container mt-4">
+            <div class="jumbotron">
+                <section id="booking-form">
+                    {{#if errorMessage }}
+                        <h4 class="alert alert-danger mt-4">{{errorMessage}}</h4>
+                    {{/if}}
+                    <h2>Book an Appointment</h2>
+                
+                    <form id="appointment-form" action="/auth/appointment" method="POST">
+                        <input type="hidden" id="tutorUser" name="tutorUser" value="{{tutorUser}}">
+                        <input type="hidden" id="name" name="name" value="{{name}}">
+                        <input type="hidden" id="startTime" name="startTime" value="{{startTime}}">
+                        <input type="hidden" id="endTime" name="endTime" value="{{endTime}}">
+                        <input type="hidden" id="daysString" name="daysString" value="{{daysString}}">
+                        <input type="hidden" id="subjectArray" name="subjectArray" value="{{subjectArrayJSON}}">
+                        <p class="lead">Tutor: {{name}}</p>
+
+                        <label for="subject">Select a Subject:</label>
+                        <select id="subject" name="subject" required>
+                            {{#each subjectArray}}
+                                <option value="{{this}}">{{this}}</option>
+                            {{/each}}
+                        </select>
+
+                        <p class="lead">Tutor Availability: {{daysString}}</p>
+                        <label for="date">Choose a Date:</label>
+                        <input type="date" id="date" name="date" required>
+                        <div id="dateError" style="color: red;"></div> <!-- Place to show the error message -->
+
+                    
+                        <p class="lead">Tutor Availability: {{startTime}} - {{endTime}}</p>
+                        <div>
+                            <label for="appStartTime">Select the start time:</label>
+                            <input type="time" id="appStartTime" name="appStartTime" min="{{startTime}}" max="{{endTime}}" required>
+                            <span class="validity"></span>
+                        </div>
+
+                        <div>
+                            <label for="appEndTime">Select the end time:</label>
+                            <input type="time" id="appEndTime" name="appEndTime" min="{{startTime}}" max="{{endTime}}" required>
+                            <span class="validity"></span>
+                        </div>
+                    
+                        <button type="submit" id="book-appointment">Book Appointment</button>
+                    </form>
+                </section>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 UTD FALL CS 4485 TEAM 69. All rights reserved.</p>
+        </footer>
+
+        <script>
+            function daysToArray(daysString) {
+                // Map of day names to their indices with Monday as 0
+                const dayMap = {
+                    'Monday': 0,
+                    'Tuesday': 1,
+                    'Wednesday': 2,
+                    'Thursday': 3,
+                    'Friday': 4,
+                    'Saturday': 5,
+                    'Sunday': 6
+                };
+
+                // Split the string into an array of day names
+                const dayNames = daysString.split(',').map(day => day.trim());
+
+                // Map the day names to their corresponding indices
+                return dayNames.map(day => dayMap[day]);
+            }
+
+            var daysString = '{{daysString}}';
+            var allowedDays = daysToArray(daysString); // Monday, Wednesday, Friday
+
+            document.getElementById('date').addEventListener('input', function(e) {
+                var selectedDate = new Date(this.value);
+                var day = selectedDate.getDay();
+                console.log(day)
+                var errorMessage = document.getElementById('dateError');
+
+                if (!allowedDays.includes(day)) {
+                    errorMessage.textContent = 'Tutor is not available on the selected day. Please select a day from the list above';
+                    this.value = '';
+                } else {
+                    errorMessage.textContent = ''; // Clear the message when the selection is valid
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,6 +1,7 @@
 const mysql = require("mysql");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const nodemailer = require('nodemailer');
 
 const db = mysql.createConnection({ 
     host: process.env.DATABASE_HOST,
@@ -188,7 +189,188 @@ exports.twofa = (req, res) => {
         return res.redirect('tutorList')
     }
     else{
-        return res.render('index')
+        return res.redirect('profile')
     }
     
+}
+
+function getCurrAppointments(tutorID, date){
+    return new Promise((resolve, reject) => {
+        db.query('SELECT Start_Time, End_Time FROM Appointment_List WHERE T_Username = ? AND Date = ?;', [tutorID, date], (error, results) => {
+        if (error) {
+            return reject(error);
+        }
+        console.log(results)
+        resolve(results);
+        });
+    });
+}
+
+function getUserAppointments(currUser, date){
+    return new Promise((resolve, reject) => {
+        db.query('SELECT Start_Time, End_Time FROM Appointment_List WHERE U_Username = ? AND Date = ?;', [currUser, date], (error, results) => {
+        if (error) {
+            return reject(error);
+        }
+        console.log(results)
+        resolve(results);
+        });
+    });
+}
+
+function isTimeSlotAvailable(tutorAppointments, userAppointments, proposedStart, proposedEnd) {
+    // Function to convert time in 'HH:MM' format to minutes since midnight
+    function timeToMinutes(time) {
+        const [hours, minutes] = time.split(':').map(Number);
+        return hours * 60 + minutes;
+    }
+
+    // Convert proposed times to minutes
+    const proposedStartMinutes = timeToMinutes(proposedStart);
+    const proposedEndMinutes = timeToMinutes(proposedEnd);
+
+    // Function to check for overlap in an array of appointments
+    function checkOverlap(appointments, userType) {
+        for (let appointment of appointments) {
+            const startMinutes = timeToMinutes(appointment.Start_Time);
+            const endMinutes = timeToMinutes(appointment.End_Time);
+
+            // Check for overlap
+            if (proposedStartMinutes < endMinutes && proposedEndMinutes > startMinutes) {
+                return { available: false, overlappingUser: userType };
+            }
+        }
+        return { available: true };
+    }
+
+    // Check for overlaps in both tutor and user appointments
+    const tutorOverlap = checkOverlap(tutorAppointments, 'tutor');
+    if (!tutorOverlap.available) return tutorOverlap;
+
+    const userOverlap = checkOverlap(userAppointments, 'user');
+    if (!userOverlap.available) return userOverlap;
+
+    return { available: true }; // No overlap found
+}
+
+function getUserName(currUser){
+    return new Promise((resolve, reject) => {
+        db.query('SELECT Name FROM Users WHERE Username = ?;', [currUser], (error, results) => {
+        if (error) {
+            return reject(error);
+        }
+        console.log(results)
+        resolve(results);
+        });
+    });
+}
+
+exports.appointment = async (req, res) => {
+    console.log(req.body)
+    let currAppointments = await getCurrAppointments(req.body.tutorUser, req.body.date);
+    let currUserAppointments = await getUserAppointments(req.session.username, req.body.date);
+    let name = await getUserName(req.session.username);
+
+    const isAvailable = isTimeSlotAvailable(currAppointments, currUserAppointments,req.body.appStartTime, req.body.appEndTime);
+    console.log(isAvailable)
+
+    let transporter = nodemailer.createTransport({
+        service: 'gmail',
+        auth: {
+            user: 'asjad.a.qadri@gmail.com',
+            pass: 'sqqsenugiivtajrb' // Consider using environment variables or secrets management
+        }
+    });
+
+    if(isAvailable.available){
+        db.query('INSERT INTO Appointment_List SET ?', {T_Username: req.body.tutorUser, Date: req.body.date, Start_Time: req.body.appStartTime, U_Username: req.session.username, End_Time: req.body.appEndTime}, (err, results) => {
+            if(err){
+                console.log("ERROR: " + err);
+            }
+            else{
+                console.log('Appointment made')
+                var tutorEmailBody = `
+                    You have a new appointment.
+
+                    Appointment Details:
+                    Student: ${name[0].Name}
+                    Subject: ${req.body.subject}
+                    Date: ${req.body.date}
+                    Start Time: ${req.body.appStartTime}
+                    End Time: ${req.body.appEndTime}
+
+                    To cancel this appointment, please log into your account and go to your profile.
+                `
+
+                var userEmailBody = `
+                Your appointment has been scheduled successfully.
+
+                Appointment Details:
+                Tutor: ${req.body.name}
+                Subject: ${req.body.subject}
+                Date: ${req.body.date}
+                Start Time: ${req.body.appStartTime}
+                End Time: ${req.body.appEndTime}
+
+                To cancel this appointment, please log into your account and go to your profile.
+                `
+            
+                let tutorMailOptions = {
+                    from: 'asjad.a.qadri@gmail.com',
+                    to: req.body.tutorUser,
+                    subject: "New Appointment - Tutoring Everywhere",
+                    text: tutorEmailBody
+                };
+
+                let userMailOptions = {
+                    from: 'asjad.a.qadri@gmail.com',
+                    to: req.session.username,
+                    subject: "New Appointment - Tutoring Everywhere",
+                    text: userEmailBody
+                };
+            
+                transporter.sendMail(tutorMailOptions, (error, info) => {
+                    if (error) {
+                      console.log('Error sending email: ' + error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                });
+
+                transporter.sendMail(userMailOptions, (error, info) => {
+                    if (error) {
+                      console.log('Error sending email: ' + error);
+                    } else {
+                      console.log('Email sent: ' + info.response);
+                    }
+                });
+                res.redirect('/userProfile?message=Appointment+set+successfully')
+            }
+        });
+    }
+    else{
+        const subjectArray = JSON.parse(req.body.subjectArray);
+        if(isAvailable.overlappingUser == 'tutor'){
+            let timeSlotsString = currAppointments.map(appointment => {
+                return `${appointment.Start_Time} to ${appointment.End_Time}`;
+            }).join(', ');
+            var errorMessage = "The tutor is not available at the selected time. Please select a different time. Current appointments: " + timeSlotsString;
+        }
+        else{
+            let timeSlotsString = currUserAppointments.map(appointment => {
+                return `${appointment.Start_Time} to ${appointment.End_Time}`;
+            }).join(', ');
+            var errorMessage = "You already have a booking at this date and time. Please select a different time. Current appointments: " + timeSlotsString;
+        }
+        res.render('appointment', {
+            tutorUser: req.body.tutorUser, 
+            name: req.body.name, 
+            startTime: req.body.startTime, 
+            endTime: req.body.endTime,
+            subjectArray: subjectArray, // This should be an array of subjects
+            daysString: req.body.daysString, // This is a string of days, e.g., "Monday, Wednesday, Friday"
+            errorMessage: errorMessage
+        });
+    }
+        
 }

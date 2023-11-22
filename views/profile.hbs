@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/MaterialDesign-Webfont/5.3.45/css/materialdesignicons.css" integrity="sha256-NAxhqDvtY0l4xn+YVa6WjAcmd94NNfttjNsDmNatFVc=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.1/css/all.min.css" integrity="sha256-2XFplPlrFClt0bIdPgpz8H7ojnk10H69xRqd9+uTShA=" crossorigin="anonymous" />
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <link rel="stylesheet" href="/style.css">
+        <link rel="stylesheet" href="/profile.css">
+        <title>Document</title>
+    </head>
+
+    <body>
+        <nav>
+            <h4>Online Tutor App</h4>
+            <ul>
+                {{!-- <li><a href="/">Home</a></li> --}}
+                <li><a href="/profile">My Profile</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-4 col-xl-4">
+                    <div class="card-box text-center">
+                        <img id="profileImage" src="{{imageDataUri}}" class="rounded-circle avatar-xl img-thumbnail" alt="profile-image">
+
+                        <div class="text-center mt-3"> <!--center, margin top 3-->
+                            <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                            <button type="button" class="btn btn-success btn-xs waves-effect mb-2 waves-light" onclick="uploadImage()">Upload</button>
+                            <button type="button" class="btn btn-danger btn-xs waves-effect mb-2 waves-light" onclick="deleteImage()">Delete</button>
+                        </div>
+
+                        <div class="text-left mt-3">
+                            <p class="text-muted mb-2 font-13"><strong>Name :</strong> <span class="ml-2">{{currName}}</span></p>
+                            <p class="text-muted mb-2 font-13"><strong>Email :</strong> <span class="ml-2 ">{{email}}</span></p>
+                            {{!-- <p class="text-muted mb-1 font-13"><strong>Subject :</strong> <span class="ml-2">[ Subject ]</span></p> --}}
+                            <h4 class="font-13 text-uppercase">About Me:</h4>
+                            <p class="text-muted font-13 mb-3">{{about}}</p>
+                        </div>
+                    </div> <!--end uppor card box-->
+
+                    <div class="card-box">
+                        <h4 class="header-title">Total Tutor Hours</h4>
+                        <h6 class="text-uppercase mt-0"><span class="float-left">{{hours}}</span></h6>
+                        {{!-- <h6 class="text-uppercase mt-0">[ Sub 1 ]<span class="float-right">[ Tutor Hours ]</span></h6>
+                        <h6 class="text-uppercase mt-0">[ Sub 2 ]<span class="float-right">[ Tutor Hours ]</span></h6>
+                        <h6 class="text-uppercase mt-0">[ Sub 3 ]<span class="float-right">[ Tutor Hours ]</span></h6> --}}
+                    </div> <!--end lower card box-->
+                </div> <!--end left col-->
+
+                <div class="col-lg-8 col-xl-8">
+                    <div class="card-box">
+                        <ul class="nav nav-pills navtab-bg"> <!--tab nav-->
+                            <li class="nav-item">
+                                <a href="#schedule" data-toggle="tab" aria-expanded="true" class="nav-link ml-0 active">
+                                    <i class="mdi mr-1"></i>My Schedule
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#pastschedule" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                    <i class="mdi mr-1"></i>Past Schedule
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a href="#settings" data-toggle="tab" aria-expanded="false" class="nav-link">
+                                    <i class="mdi mr-1"></i>Settings
+                                </a>
+                            </li>
+                        </ul>
+
+                        <div class="tab-content">
+                            <div class="tab-pane show active" id="schedule">
+                                <h5 class="mb-3 mt-4 text-uppercase"><i class="mdi mr-1"></i>Appointments</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Name</th>
+                                                <th>Date</th>
+                                                <th>Start Time</th>
+                                                <th>End Time</th>
+                                                <th>Cancel</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {{#each appointments}}
+                                                {{#unless hasPassed}}
+                                                <tr>
+                                                    <td>{{displayIndex}}</td>
+                                                    <td>{{Name}}</td>
+                                                    <td>{{Date}}</td>
+                                                    <td>{{Start_Time}}</td>
+                                                    <td>{{End_Time}}</td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger" data-student-email="{{this.Username}}" data-tutor-date="{{this.Date}}" data-tutor-time="{{this.Time}}" onclick="handleAppCancel(this)" {{#if disableCancel}} disabled {{/if}}>Cancel</button>
+                                                    </td> 
+                                                </tr>
+                                                {{/unless}}
+                                            {{/each}}
+                                            
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane " id="pastschedule">
+                                <h5 class="mb-3 mt-4 text-uppercase"><i class="mdi mr-1"></i>Past Appointments</h5>
+                                <div class="table-responsive">
+                                    <table class="table table-borderless mb-0">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th>No.</th>
+                                                <th>Tutor Name</th>
+                                                <th>Date</th>
+                                                <th>Start Time</th>
+                                                <th>End Time</th>
+                                                <th>Cancel</th>
+                                            </tr>
+                                        </thead>
+
+                                        <tbody>
+                                            {{#each appointments}}
+                                                {{#if hasPassed}}
+                                                    <tr>
+                                                        <td>{{displayIndex}}</td>
+                                                        <td>{{Name}}</td>
+                                                        <td>{{Date}}</td>
+                                                        <td>{{Start_Time}}</td>
+                                                        <td>{{End_Time}}</td>
+                                                        <td>
+                                                            <button type="button" class="btn btn-danger" data-student-email="{{this.Username}}" data-tutor-date="{{this.Date}}" data-tutor-time="{{this.Time}}" onclick="handleAppCancel(this)" {{#if disableCancel}} disabled {{/if}}>Cancel</button>
+                                                        </td> 
+                                                    </tr>
+                                                {{/if}}
+                                            {{/each}}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="tab-pane" id="settings">
+                                <form>
+                                    <h5 class="mb-3 text-uppercase bg-light p-2"><i class="mdi mr-1"></i>Personal Info</h5>
+                                    
+
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="form-group">
+                                                <label for="aboutMe">About Me</label>
+                                                <textarea class="form-control" id="aboutMe" rows="4" placeholder="Write something about me..."></textarea>
+                                                <!--should me updated 'about me section' in left card, will be able to see by users from tutor list-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-success waves-effect waves-light mt-2" onclick="changeAbout(event)">Save</button>
+                                    </div> <!--Save if new, confime pwd are entered to change-->
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="email">Email</label>
+                                                <input type="text" class="form-control" id="email" placeholder="{{email}}" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="curpwd">Current Password</label> <!--should be same as current password-->
+                                                <input type="password" class="form-control" id="curpwd" placeholder="Enter current password"> <!--only if user want to change-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="newpwd">New Password</label>
+                                                <input type="password" class="form-control" id="newpwd" placeholder="Enter new password"> <!--only if user want to change-->
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="confirmpwd">Confirm Password</label> <!--should be same as new password-->
+                                                <input type="password" class="form-control" id="confirmpwd" placeholder="Enter new password"> <!--only if user want to change-->
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="text-right">
+                                        <button type="submit" class="btn btn-success waves-effect waves-light mt-2" onclick="changePass(event)">Save</button>
+                                    </div> <!--Save if new, confime pwd are entered to change-->
+                                </form>
+                            </div> <!--end settings-->
+                        </div> <!--end tab contents-->
+                    </div> <!--end card box-->
+                </div> <!--end right col-->
+            </div> <!--end row-->
+        </div> <!--end container-->
+
+        <div class="modal fade" id="cancelModal" tabindex="-1" aria-labelledby="cancelModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="cancelModalLabel">Confirm Cancellation</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Are you sure you want to cancel this appointment?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('cancelModal')">Close</button>
+                    <button type="button" class="btn btn-danger" onclick="confirmCancellation()">Confirm</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="samePassModal" tabindex="-1" aria-labelledby="samePassModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="samePass">Same Password</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    New password is same as old password. Please enter a different password.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('samePassModal')">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="mismatchModal" tabindex="-1" aria-labelledby="mismatchModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="mismatchPass">Passwords do not match</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    The new password and the confirm password do not match. Please re-enter the paswords.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('mismatchModal')">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="currMismatchModal" tabindex="-1" aria-labelledby="currMismatchModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="currMismatchPass">Current Password is incorrect</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    The current password you entered is incorrect. Please enter the correct password and try again. 
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="closeModal('currMismatchModal')">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="passChanged" tabindex="-1" aria-labelledby="passChanged" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successPass">Password changed successfully</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Your password has been updated successfully!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="closeModal('passChanged')">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="aboutChanged" tabindex="-1" aria-labelledby="aboutChanged" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="successAbout">About Me changed successfully</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Your About Me section has been updated successfully!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-success" data-dismiss="modal" onclick="closeModal('aboutChanged')">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="aboutBlank" tabindex="-1" aria-labelledby="aboutBlank" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="blankAbout">Your About Me is blank</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    Please enter a little bit about yourself and then click save.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="closeModal('aboutBlank')">Close</button>
+                </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            // Function to handle image upload
+            function uploadImage() {
+                const inputElement = document.getElementById('image-upload');
+                inputElement.addEventListener('change', function () {
+                    const file = inputElement.files[0];
+                    if (file) {
+                        const formData = new FormData();
+                        formData.append('image', file);
+                        const reader = new FileReader();
+                        reader.onload = function (e) {
+                            const imageElement = document.getElementById('profileImage'); // Update the ID here
+                            imageElement.src = e.target.result;
+                        };
+                        reader.readAsDataURL(file);
+                        fetch('/upload-image', { // The URL to your server-side script
+                            method: 'POST',
+                            body: formData
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            if(data.success){
+                                console.log("Upload success")
+                            }
+                            else{
+                                console.log("Upload failed")
+                            }
+                        })
+                        .catch(error => {
+                            console.error(error);
+                            // Handle errors
+                        });
+                    }
+                });
+                inputElement.click(); // Trigger the hidden file input
+            }
+
+            // Function to delete the profile image
+            function deleteImage() {
+                const imageElement = document.getElementById('profileImage'); // Update the ID here
+                imageElement.src = "https://bootdey.com/img/Content/avatar/avatar1.png"; // Replace 'link' with the URL of your default image
+                fetch('/delete-image', { // The URL to your server-side script
+                    method: 'POST'
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success){
+                        console.log("Delete success")
+                    }
+                    else{
+                        console.log("Delete failed")
+                    }
+                })
+                .catch(error => {
+                    console.error(error);
+                    // Handle errors
+                });            
+            }
+
+        </script>
+
+        <script>
+            function handleAppCancel(button) {
+                const studentEmail = button.getAttribute('data-student-email');
+                const appDate = button.getAttribute('data-tutor-date');
+                const appTime = button.getAttribute('data-tutor-time');
+                const type = 'tutor';
+
+                // Save these values to some global variables or data attributes for later use
+                window.appointmentData = { studentEmail, appDate, appTime, type };
+
+                // Show the modal
+                $('#cancelModal').modal('show');
+            }
+
+            function confirmCancellation() {
+                const { studentEmail, appDate, appTime, type } = window.appointmentData;
+
+                fetch('/delete-appointment', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ studentEmail, appDate, appTime, type })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Deleted');
+                        $('#cancelModal').modal('hide'); // Hide the modal
+                        location.reload()
+                    } else {
+                        console.log('Failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+            }
+
+            function closeModal(modalName){
+                var string = '#' + modalName
+                $(string).modal('hide');
+            }
+
+            function changeAbout(event){
+                event.preventDefault();
+                const aboutMe = document.getElementById("aboutMe").value;
+                const type = 'tutor';
+
+                if (aboutMe === ''){
+                    $('#aboutBlank').modal('show');
+                }
+                else{
+                    fetch('/change-about', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ aboutMe, type })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('About changed');
+                        $('#aboutChanged').modal('show');
+                        $('#aboutChanged').on('hidden.bs.modal', function () {
+                            location.reload();
+                        });
+                    } else {
+                        console.log('Failed');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                }
+
+            }
+
+            function changePass(event){
+                event.preventDefault();
+                const currPass = document.getElementById("curpwd").value;
+                const newPass = document.getElementById("newpwd").value;
+                const confirmPass = document.getElementById("confirmpwd").value;
+                const aboutMe = document.getElementById("aboutMe").value;
+                const type = 'tutor';
+
+                if (currPass == newPass){
+                    $('#samePassModal').modal('show');
+                }
+                else if(newPass != confirmPass){
+                    $('#mismatchModal').modal('show');
+                }
+                else if (newPass.length < 8 || !/[A-Z]/.test(newPass)) {
+                    alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
+                    return false; // Prevent form submission
+                }
+                else{
+                    fetch('/change-password', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ currPass, newPass, confirmPass, type })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        console.log('Password changed');
+                        $('#passChanged').modal('show');
+                        $('#passChanged').on('hidden.bs.modal', function () {
+                            location.reload();
+                        });
+                    } else {
+                        console.log('Failed');
+                        if(data.mismatch){
+                            $('#currMismatchModal').modal('show');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
+                }
+            }
+
+        </script>
+    </body>
+</html>

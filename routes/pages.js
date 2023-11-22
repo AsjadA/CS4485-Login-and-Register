@@ -30,8 +30,17 @@ router.get('/twofa', (req, res) => {
     }
 })
 
-// router.get('/favorites', (req, res) => {
-//     res.render('favorites');
-// })
+router.get('/profile', (req, res) => {
+    if(!req.session.username){
+        res.render('login', {message: "Please login to access this page"})
+    }
+    else{
+        res.redirect('/auth/profile');
+    }
+})
+
+router.get('/appointment', (req, res) => {
+    res.render('appointment');
+})
 
 module.exports = router;

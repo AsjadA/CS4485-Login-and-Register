@@ -15,8 +15,10 @@
     <nav>
         <h4> Online Tutor App</h4>
         <ul>
-            <li><a href="/favorites">Favorites</a></li>
-            <li><a href="/auth/tutorList">List of Tutors</a></li>
+            <li><a href="/userProfile">Profile</a></li>
+            <li><a href="/favorites">Favorite Tutors</a></li>
+            <li><a href="/auth/tutorList">All Tutors</a></li>
+            <li><a href="/logout">Logout</a></li>
         </ul>
     </nav>
     <div style="margin-left: 5%; margin-right: 5%; width: 90%;">
@@ -34,6 +36,7 @@
         <th scope="col">Start Time</th>
         <th scope="col">End Time</th>
         <th scope="col">Remove from favorites</th>
+        <th scope="col">Make Appointment</th>
         </tr>
     </thead>
     <tbody id = 'favTutors'>
@@ -50,6 +53,17 @@
                 <label for="favorite-{{@index}}" class="container">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-heart"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
                 </label>
+            </td>
+            <td>
+                <form action="/make-appointment" method="post">
+                    <input type="hidden" name="tutorId" value="{{this.T_Username}}">
+                    <input type="hidden" name="tutorName" value="{{this.Name}}">
+                    <input type="hidden" name="tutorSubjects" value="{{this.subject}}">
+                    <input type="hidden" name="tutorDay" value="{{this.Day}}">
+                    <input type="hidden" name="tutorStartTime" value="{{this.start_time}}">
+                    <input type="hidden" name="tutorEndTime" value="{{this.end_time}}">
+                    <button type="submit" class="btn btn-outline-primary">Make an Appointment</button>
+                </form>
             </td>
         </tr>
         {{/each}}

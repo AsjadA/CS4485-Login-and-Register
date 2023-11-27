@@ -40,8 +40,13 @@ router.get('/profile', (req, res) => {
 })
 
 router.get('/userProfile', (req, res) => {
-    res.render('userProfile');  //need to check for req.session.username?
-})
+    if(!req.session.username){
+        res.render('login', {message: "Please login to access this page"})
+    }
+    else{
+        res.redirect('/auth/userProfile');
+    }
+})    //not sure it is correct way and working - Jun
 
 router.get('/appointment', (req, res) => {
     res.render('appointment');

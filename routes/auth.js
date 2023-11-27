@@ -14,4 +14,8 @@ router.post('/twofa', authController.twofa)
 
 router.post('/appointment', authController.appointment)
 
+router.post('/profile', authController.profile)
+
+router.post('/userProfile', authController.userProfile)
+
 module.exports = router;

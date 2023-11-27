@@ -39,6 +39,10 @@ router.get('/profile', (req, res) => {
     }
 })
 
+router.get('/userProfile', (req, res) => {
+    res.render('userProfile');  //need to check for req.session.username?
+})
+
 router.get('/appointment', (req, res) => {
     res.render('appointment');
 })

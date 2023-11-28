@@ -24,9 +24,11 @@
         <div class="container mt-4">
             <div class="jumbotron">
                 <section id="booking-form">
+
                     {{#if errorMessage }}
                         <h4 class="alert alert-danger mt-4">{{errorMessage}}</h4>
                     {{/if}}
+                    
                     <h2>Book an Appointment</h2>
                 
                     <form id="appointment-form" action="/auth/appointment" method="POST">

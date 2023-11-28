@@ -1,0 +1,56 @@
+* {
+    box-sizing: border-box;
+}
+
+/* Add styles to the form container */
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 20px auto;
+    max-width: 800px; /* Increased maximum width */
+    padding: 20px; /* Increased padding for more space inside the container */
+}
+
+.container h1 {
+    text-align: center;
+    padding: 20px; /* Adjusted heading padding for more space */
+}
+
+.card {
+    width: 100%; /* Makes the card take the full width of the container */
+    max-width: 500px; /* Limited maximum width for better readability */
+    margin: 0 auto; /* Centering the card */
+    padding: 20px; /* Increased padding for inner content */
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.1); /* Adding a subtle shadow for better visual separation */
+}
+
+/* Full-width input fields */
+input[type=email], input[type=password] {
+    width: 100%; /* Adjusted input width for more space */
+    padding: 15px;
+    margin: 10px 0; /* Increased margin for better spacing */
+    border: none;
+    background: #f1f1f1;
+}
+
+input[type=email]:focus, input[type=password]:focus {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Set a style for the submit button */
+.btn {
+    background-color: #04AA6D;
+    color: white;
+    padding: 16px 20px;
+    border: none;
+    cursor: pointer;
+    width: 100%; /* Adjusted button width for more space */
+    opacity: 0.9;
+    margin-top: 20px; /* Increased margin for better spacing */
+}
+
+.btn:hover {
+    opacity: 1;
+}

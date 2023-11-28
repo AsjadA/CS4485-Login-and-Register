@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="/twofa.css">
+    <title>TE</title>
 </head>
+
 <body>
     <nav>
-        <h4> Online Tutor App</h4>
+        <h4><a href="/">Tutoring Everywhere</a></h4>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
@@ -22,24 +24,28 @@
     {{/if}}
 
     <div class="container mt-4">
-        <div class="card">
-            <div class="card-body">
-                <form action="/auth/twofa" method="POST" onSubmit="return confirmCode()">
-                    <input type="hidden" name="type" value="{{type}}">
-                    <h1 class="display-4">2 Factor authentication using email</h1>
-                    <p class="lead">An email containing a code will be sent to email address you have registered with when you press the button below.</p>
-                    <button type="button" class="btn btn-primary btn-lg" onclick="return sendEmail()">Generate and send code</button>
-                    <p>Please enter the code in the textbox below</p>
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="input-group-text">Code: </span>
-                        </div>
-                        <input type="text" id="userCode" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+        <div class="card-body">
+            <form action="/auth/twofa" method="POST" onSubmit="return confirmCode()">
+                <input type="hidden" name="type" value="{{type}}">
+                <h1>2 Factor Authentication using Email</h1>
+
+                <p class="lead">An email containing a code will be sent to email address you have registered with when you press the button below.</p>
+                <button type="button" class="btn btn-primary btn-lg" onclick="return sendEmail()">Generate and Send Code</button>
+                
+                <div class="input-group input-group-sm mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text" id="input-group-text">Code: </span>
                     </div>
-                    <button type="submit" class="btn btn-primary">Verify</button>
-                </form>
-            </div>
+                    <input type="text" id="userCode" class="form-control" placeholder="Please enter the code from email..." aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+                </div>
+                <button type="submit" class="btn btn-primary">Verify</button>
+            </form>
         </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 UTD FALL CS 4485 TEAM 69. All rights reserved.</p>
+    </footer>
     
     <script src= "https://smtpjs.com/v3/smtp.js"> </script> 
     
@@ -81,6 +87,7 @@
             return true
         }
     </script>
+    
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 </body>
 </html>

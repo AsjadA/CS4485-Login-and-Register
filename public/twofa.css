@@ -1,0 +1,46 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card-body {
+    padding: 20px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+    margin-top: 10px;
+    margin-bottom: 30px;
+}
+
+h1 {
+    color: #007bff;
+}
+
+p {
+    color: #495057;
+}
+
+.input-group-text {
+    background-color: #007bff;
+    color: #ffffff;
+    border: none;
+}
+
+.form-control {
+    border: 1px solid #ced4da;
+    border-radius: 0 4px 4px 0;
+}
+
+.btn-verify {
+    margin-top: 10px;
+}

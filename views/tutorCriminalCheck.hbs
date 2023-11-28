@@ -5,11 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
     <link rel="stylesheet" href="/style.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="/criminalCheck.css">
+    <title>TE</title>
 </head>
 <body>
     <nav>
-        <h4> Online Tutor App</h4>
+        <h4><a href="/">Tutoring Everywhere</a></h4>
         <ul>
             <li><a href="/">Home</a></li>
             <li><a href="/login">Login</a></li>
@@ -18,136 +19,144 @@
     </nav>
 
     <div class="container mt-4">
-        <div class="card">
-            <div class="class-header">
-                Criminal Check for Tutors 
+        <div class="class-header">
+            Criminal Check for Tutors 
+        </div>
+        
+        <div class="card-body">
+            <form action="/auth/tutorCriminalCheck" method="POST" id = "tutorCriminalCheck">
             </div>
-            <div class="card-body">
-                <form action="/auth/tutorCriminalCheck" method="POST" id = "tutorCriminalCheck">
+                <input type="hidden" name="name" value="{{name}}">
+                <input type="hidden" name="email" value="{{email}}">
+                <input type="hidden" name="password" value="{{password}}">
+                <input type="hidden" name="tutorAbout" value="{{tutorAbout}}">
+                <input type="hidden" name="tutorSubjects" value="{{tutorSubjects}}">
+                <input type="hidden" name="tutorDays" value="{{tutorDays}}">
+                <input type="hidden" name="startTime" value="{{startTime}}">
+                <input type="hidden" name="endTime" value="{{endTime}}">
+
+                <label for="felony">Have you ever been convicted of a felony?</label>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="felony" id="yes1" value="yes">
+                    <label class="form-check-label" for="yes1">
+                        Yes
+                    </label>
                 </div>
-                    <input type="hidden" name="name" value="{{name}}">
-                    <input type="hidden" name="email" value="{{email}}">
-                    <input type="hidden" name="password" value="{{password}}">
-                    <input type="hidden" name="tutorAbout" value="{{tutorAbout}}">
-                    <input type="hidden" name="tutorSubjects" value="{{tutorSubjects}}">
-                    <input type="hidden" name="tutorDays" value="{{tutorDays}}">
-                    <input type="hidden" name="startTime" value="{{startTime}}">
-                    <input type="hidden" name="endTime" value="{{endTime}}">
 
-                     <label for="felony">Have you ever been convicted of a felony?</label>
-                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="felony" id="yes" value="yes">
-                        <label class="form-check-label" for="yes">
-                            Yes
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="felony" id="no" value="no">
-                        <label class="form-check-label" for="no">
-                            No
-                        </label>
-                    </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="felony" id="no1" value="no">
+                    <label class="form-check-label" for="no1">
+                        No
+                    </label>
+                </div>
 
-                    <label for="misdemeanor">Have you ever been convicted of a misdemeanor?</label>
-                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="misdemeanor" id="yes" value="yes">
-                        <label class="form-check-label" for="yes">
-                            Yes
-                        </label>
-                    </div>
+                <label for="misdemeanor">Have you ever been convicted of a misdemeanor?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="misdemeanor" id="no" value="no">
-                        <label class="form-check-label" for="no">
-                            No
-                        </label>
-                    </div>
+                    <input class="form-check-input" type="radio" name="misdemeanor" id="yes2" value="yes">
+                    <label class="form-check-label" for="yes2">
+                        Yes
+                    </label>
+                </div>
 
-                    <label for="arrested">Have you ever been arrested and charged with a crime (even if not convicted)?</label>
-                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="arrested" id="yes" value="yes">
-                        <label class="form-check-label" for="yes">
-                            Yes
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="arrested" id="no" value="no">
-                        <label class="form-check-label" for="no">
-                            No
-                        </label>
-                    </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="misdemeanor" id="no2" value="no">
+                    <label class="form-check-label" for="no2">
+                        No
+                    </label>
+                </div>
 
-                    <label for="drug">Have you ever been convicted of a drug-related offense?</label>
-                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="drug" id="yes" value="yes">
-                        <label class="form-check-label" for="yes">
-                            Yes
-                        </label>
-                    </div>
+                <label for="arrested">Have you ever been arrested and charged with a crime (even if not convicted)?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="drug" id="no" value="no">
-                        <label class="form-check-label" for="no">
-                            No
-                        </label>
-                    </div>
+                    <input class="form-check-input" type="radio" name="arrested" id="yes3" value="yes">
+                    <label class="form-check-label" for="yes3">
+                        Yes
+                    </label>
+                </div>
 
-                    <label for="sex">Have you ever been convicted of a sex-related offense?</label>
-                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sex" id="yes" value="yes">
-                        <label class="form-check-label" for="yes">
-                            Yes
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" type="radio" name="sex" id="no" value="no">
-                        <label class="form-check-label" for="no">
-                            No
-                        </label>
-                    </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="arrested" id="no3" value="no">
+                    <label class="form-check-label" for="no3">
+                        No
+                    </label>
+                </div>
 
-                    <label for="currentCharges">Are you currently the subject of any pending criminal charges?</label>
-                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="currentCharges" id="yes" value="yes">
-                        <label class="form-check-label" for="yes">
-                            Yes
-                        </label>
-                    </div>
+                <label for="drug">Have you ever been convicted of a drug-related offense?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="currentCharges" id="no" value="no">
-                        <label class="form-check-label" for="no">
-                            No
-                        </label>
-                    </div>
+                    <input class="form-check-input" type="radio" name="drug" id="yes4" value="yes">
+                    <label class="form-check-label" for="yes4">
+                        Yes
+                    </label>
+                </div>
 
-                    <label for="whiteCollar">Have you ever been convicted of a white-collar crime (e.g., fraud, embezzlement)?</label>
-                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="whiteCollar" id="yes" value="yes">
-                        <label class="form-check-label" for="yes">
-                            Yes
-                        </label>
-                    </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="drug" id="no4" value="no">
+                    <label class="form-check-label" for="no4">
+                        No
+                    </label>
+                </div>
+
+                <label for="sex">Have you ever been convicted of a sex-related offense?</label>
                     <div class="form-check">
-                        <input class="form-check-input" type="radio" name="whiteCollar" id="no" value="no">
-                        <label class="form-check-label" for="no">
-                            No
-                        </label>
-                    </div>
+                    <input class="form-check-input" type="radio" name="sex" id="yes5" value="yes">
+                    <label class="form-check-label" for="yes5">
+                        Yes
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="sex" id="no5" value="no">
+                    <label class="form-check-label" for="no5">
+                        No
+                    </label>
+                </div>
+
+                <label for="currentCharges">Are you currently the subject of any pending criminal charges?</label>
+                    <div class="form-check">
+                    <input class="form-check-input" type="radio" name="currentCharges" id="yes6" value="yes">
+                    <label class="form-check-label" for="yes6">
+                        Yes
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="currentCharges" id="no6" value="no">
+                    <label class="form-check-label" for="no6">
+                        No
+                    </label>
+                </div>
+
+                <label for="whiteCollar">Have you ever been convicted of a white-collar crime (e.g., fraud, embezzlement)?</label>
+                    <div class="form-check">
+                    <input class="form-check-input" type="radio" name="whiteCollar" id="yes7" value="yes">
+                    <label class="form-check-label" for="yes7">
+                        Yes
+                    </label>
+                </div>
+
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="whiteCollar" id="no7" value="no">
+                    <label class="form-check-label" for="no7">
+                        No
+                    </label>
+                </div>
 
                     
-                    <div>
+                <div>
                     <button type="submit" class="btn btn-primary">Submit Answers</button>
-                    </div>
-                </form>
-            </div>
+                </div>
+            </form>
         </div>
         {{#if message }}
             <h4 class="alert alert-danger mt-4">{{message}}</h4>
         {{/if}}
     </div>
 
+    <footer>
+        <p>&copy; 2023 UTD FALL CS 4485 TEAM 69. All rights reserved.</p>
+    </footer>
+
     <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-6vwVLFThqHVTcjpGiM94fUjCW365IGE+K9c9vT4ukBr06rQVwJs5kE7mYuGaDwY" crossorigin="anonymous"></script>
-
-
 
 </body>
 </html>

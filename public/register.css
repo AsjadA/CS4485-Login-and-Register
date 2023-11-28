@@ -1,0 +1,54 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    width: 800px;
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    position: center;
+}
+
+/* Style the card header */
+.card-header {
+    background-color: #007bff;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-check {
+    margin-bottom: 10px;
+    margin-right: 5px;   
+}
+
+/* Add some padding to the card body */
+.card-body {
+    padding: 20px;
+}
+
+/* Style form labels and inputs */
+label {
+    font-weight: bold;
+}
+
+/* Style the submit button */
+.btn-primary {
+    background-color: #007bff;
+    border: none;
+}
+
+/* Add some margin to the alert message */
+.alert {
+    margin-top: 20px;
+}

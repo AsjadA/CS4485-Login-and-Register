@@ -39,9 +39,8 @@ input[type=email]:focus, input[type=password]:focus {
     outline: none;
 }
 
-/* Set a style for the submit button */
 .btn {
-    background-color: #04AA6D;
+    background-color: #007bff;
     color: white;
     padding: 16px 20px;
     border: none;

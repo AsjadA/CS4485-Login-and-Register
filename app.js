@@ -80,7 +80,7 @@ function getFavTutors(currUser) {
 
 app.get('/auth/tutorList', async (req, res) => {
     console.log(req.session.username)
-    if(req.session.username){
+    if(req.session.loggedIn){
         const tutors = await getTutors()
         // db.query('', (err, results) => {
         //     if (err){
@@ -185,7 +185,7 @@ app.post('/remove-from-favorites', (req, res) => {
 
 app.get('/favorites', async (req, res) => {
     console.log(req.session.username)
-    if(req.session.username){
+    if(req.session.loggedIn){
         query = `SELECT f.T_Username, t.Name, s.subject, a.start_time, a.Day, a.end_time
                 FROM User_Favorites as f
                 LEFT JOIN Tutor as t on t.Username = f.T_Username
@@ -355,7 +355,7 @@ function updateUserHours(currUser, type, userHours){
 app.get('/userProfile', async (req, res) => {
     console.log(req.session.username)
 
-    if(req.session.username){
+    if(req.session.loggedIn){
         const hours = await getHours(req.session.username, 'student')
         const updateHours = await updateUserHours(req.session.username, 'student', hours)
         const name = await getName(req.session.username, 'student')
@@ -519,72 +519,72 @@ app.post('/change-password', async (req, res) => {
 
 app.get('/auth/profile', async (req, res) => {
     console.log(req.session.username)
-    const hours = await getHours(req.session.username, 'tutor')
-    const updateHours = await updateUserHours(req.session.username, 'tutor', hours)
-    const name = await getName(req.session.username, 'tutor')
-    const appointments = await getAppointments(req.session.username, 'tutor')
-    //console.log(name[0].imageDataUri)
+    if(req.session.loggedIn){
+        const hours = await getHours(req.session.username, 'tutor')
+        const updateHours = await updateUserHours(req.session.username, 'tutor', hours)
+        const name = await getName(req.session.username, 'tutor')
+        const appointments = await getAppointments(req.session.username, 'tutor')
+        //console.log(name[0].imageDataUri)
 
-    appointments.forEach(packet => {
-        // Parse the date and time strings
-        const dateTimeString = `${packet.Date} ${packet.Start_Time}`;
-        const dateTime = new Date(dateTimeString);
-        
-        // Get the current date and time
-        const now = new Date();
-        
-        // Compare the dates and add the key-value pair
-        packet.hasPassed = dateTime < now;
-    });
-        
-    appointments.forEach(packet => {
-        const now = new Date();
-        const appointmentDateTime = new Date(`${packet.Date} ${packet.Start_Time}`);
-        const dateTime = new Date(appointmentDateTime); 
-        const hoursDiff = (dateTime - now) / 1000 / 60 / 60;
-        if (hoursDiff <= 24) {
-            packet.disableCancel = true;
-        }
-        else{
-            packet.disableCancel = false;
-        }
-    });
-
-    appointments.sort((a, b) => {
-        // Assuming date is in the format 'MM/DD/YYYY'
-        const dateA = new Date(a.Date);
-        const dateB = new Date(b.Date);
-        return dateA - dateB;
-    });      
-
-    var upcomingCounter = 1;
-        var pastCounter = 1;
-        appointments.forEach((packet) => {
-            if(!packet.hasPassed){
-                packet.displayIndex = upcomingCounter;
-                upcomingCounter++;
+        appointments.forEach(packet => {
+            // Parse the date and time strings
+            const dateTimeString = `${packet.Date} ${packet.Start_Time}`;
+            const dateTime = new Date(dateTimeString);
+            
+            // Get the current date and time
+            const now = new Date();
+            
+            // Compare the dates and add the key-value pair
+            packet.hasPassed = dateTime < now;
+        });
+            
+        appointments.forEach(packet => {
+            const now = new Date();
+            const appointmentDateTime = new Date(`${packet.Date} ${packet.Start_Time}`);
+            const dateTime = new Date(appointmentDateTime); 
+            const hoursDiff = (dateTime - now) / 1000 / 60 / 60;
+            if (hoursDiff <= 24) {
+                packet.disableCancel = true;
             }
             else{
-                packet.displayIndex = pastCounter;
-                pastCounter++;
+                packet.disableCancel = false;
             }
-            
         });
-        
-    res.render('profile', {
-        currName: name[0].Name, 
-        email: req.session.username,
-        hours: name[0].Hours_Tutored,
-        about: name[0].About_Me,
-        imageDataUri: name[0].imageDataUri,
-        appointments: appointments
-    })
-    // if(req.session.username){
-        
-    // }
-    // else{
-    //     res.render('login', {message: "Please login to access page"})
-    // }
+
+        appointments.sort((a, b) => {
+            // Assuming date is in the format 'MM/DD/YYYY'
+            const dateA = new Date(a.Date);
+            const dateB = new Date(b.Date);
+            return dateA - dateB;
+        });      
+
+        var upcomingCounter = 1;
+            var pastCounter = 1;
+            appointments.forEach((packet) => {
+                if(!packet.hasPassed){
+                    packet.displayIndex = upcomingCounter;
+                    upcomingCounter++;
+                }
+                else{
+                    packet.displayIndex = pastCounter;
+                    pastCounter++;
+                }
+                
+            });
+            
+        res.render('profile', {
+            currName: name[0].Name, 
+            email: req.session.username,
+            hours: name[0].Hours_Tutored,
+            about: name[0].About_Me,
+            imageDataUri: name[0].imageDataUri,
+            appointments: appointments
+        }) 
+    }
+    else{
+        res.render('login', {message: "Please login to access page"})
+    }
+    
     
 });
 

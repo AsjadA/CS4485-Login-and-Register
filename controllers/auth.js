@@ -185,13 +185,13 @@ exports.tutorList = (req, res) => {
 exports.twofa = (req, res) => {
     console.log(req.body)
     console.log(req.session.username)
+    req.session.loggedIn = true;
     if(req.body.type == 'student'){
         return res.redirect('tutorList')
     }
     else{
         return res.redirect('profile')
     }
-    
 }
 
 function getCurrAppointments(tutorID, date){

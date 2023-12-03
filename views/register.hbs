@@ -152,29 +152,55 @@
 
     <script>
         function validatePassword() {
-        var password = document.getElementById("password").value;
-        var type = document.getElementById("type").value;
-        console.log(password)
-        var startTime = document.getElementById("startTime").value;
-        var endTime = document.getElementById("endTime").value;
-        // Check if the password meets the requirements
-        if (password.length < 8 || !/[A-Z]/.test(password)) {
-            alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
-            return false; // Prevent form submission
-        }
-        else if(type == 'tutor'){
-            var timeFormat = /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
-            console.log(startTime)
-            console.log(endTime)
-            console.log(!timeFormat.test(startTime))
-            console.log(!timeFormat.test(endTime))
-            if (!timeFormat.test(startTime) || !timeFormat.test(endTime)) {
-                alert("Please enter the time in the format: hh:mm AM/PM");
-                return false;
+            //Check password
+            var password = document.getElementById("password").value;
+            if (password.length < 8 || !/[A-Z]/.test(password)) {
+                alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
+                return false; // Prevent form submission
             }
-        }
 
-        return true; // Allow form submission
+            //Check email
+            var email = document.getElementById("email").value;
+            console.log(email)
+            var emailFormat = /^[^@]+@[a-zA-Z0-9.-]+\.(com|edu)$/i;
+            console.log(emailFormat.test(email))
+            if (!emailFormat.test(email)) {
+                alert("Please enter a valid email.");
+                return false; // Prevent form submission
+            }
+
+            //Check tutor items
+            var type = document.querySelector('input[name="type"]:checked').value;
+            var startTime = document.getElementById("startTime").value;
+            var endTime = document.getElementById("endTime").value;
+            if(type == 'tutor'){
+                var timeFormat = /^(0?[1-9]|1[0-2]):[0-5][0-9] (AM|PM)$/;
+                console.log(startTime)
+                console.log(endTime)
+                console.log(!timeFormat.test(startTime))
+                console.log(!timeFormat.test(endTime))
+                if (!timeFormat.test(startTime) || !timeFormat.test(endTime)) {
+                    alert("Please enter the time in the format: hh:mm AM/PM");
+                    return false;
+                }
+
+                var daysAvailable = document.querySelector('input[name="tutorDays"]').value;
+                var enteredDays = daysAvailable.split(',').map(day => day.trim());
+                if (enteredDays.includes('')) {
+                    alert("Please enter the days as a comma-separated list");
+                    return false;
+                }   
+                var validDays = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+                // Check if each entered day is valid
+                for (var day of enteredDays) {
+                    if (!validDays.includes(day)) {
+                        alert("Invalid day entered. Please make sure they are comma separated: " + day);
+                        return false;
+                    }
+                }
+            }
+
+            return true; // Allow form submission
         }
     </script>
 </body>

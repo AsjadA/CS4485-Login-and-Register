@@ -277,8 +277,8 @@ exports.appointment = async (req, res) => {
     let transporter = nodemailer.createTransport({
         service: 'gmail',
         auth: {
-            user: 'asjad.a.qadri@gmail.com',
-            pass: 'sqqsenugiivtajrb' // Consider using environment variables or secrets management
+            user: 'tutoring.everywhere.cs@gmail.com',
+            pass: 'wawuwlauzhehwouc' // Consider using environment variables or secrets management
         }
     });
 

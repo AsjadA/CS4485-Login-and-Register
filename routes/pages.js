@@ -14,7 +14,12 @@ router.get('/login', (req, res) => {
 })
 
 router.get('/tutorList', (req, res) => {
-    res.redirect('tutorList');
+    if(!req.session.loggedIn){
+        res.render('login', {message: "Please login to access this page"})
+    }
+    else{
+        res.redirect('tutorList')
+    }
 })
 
 router.get('/tutorCriminalCheck', (req, res) => {
@@ -40,7 +45,13 @@ router.get('/profile', (req, res) => {
 })
 
 router.get('/appointment', (req, res) => {
-    res.render('appointment');
+    if(!req.session.loggedIn){
+        res.render('login', {message: "Please login to access this page"})
+    }
+    else{
+        res.render('appointment');
+    }
+    
 })
 
 module.exports = router;

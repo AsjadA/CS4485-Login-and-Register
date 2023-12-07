@@ -1,8 +1,8 @@
 .card-box {
     background-color: #fff;
     background-clip: border-box;
-    border: 1px solid #e7eaed;
     padding: 1.5rem;
+    border: 1px solid #e7eaed;
     border-radius: .25rem;
     margin-bottom: 24px;
 }

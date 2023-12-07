@@ -63,7 +63,9 @@
                             <input type="time" id="appEndTime" name="appEndTime" min="{{startTime}}" max="{{endTime}}" required>
                             <span class="validity"></span>
                         </div>
-                    
+                        
+                        <div id="appointmentError"></div>
+
                         <button type="submit" id="book-appointment">Book Appointment</button>
                     </form>
                 </section>
@@ -108,6 +110,28 @@
                     this.value = '';
                 } else {
                     errorMessage.textContent = ''; // Clear the message when the selection is valid
+                }
+            });
+
+            document.getElementById('book-appointment').addEventListener('click', function (e) {
+                var startTime = document.getElementById('appStartTime').value;
+                var endTime = document.getElementById('appEndTime').value;
+                var startTimeObj = new Date('2000-01-01T' + startTime + ':00');
+                var endTimeObj = new Date('2000-01-01T' + endTime + ':00');
+
+                var errorContainer = document.getElementById('appointmentError');
+
+                if (startTimeObj >= endTimeObj) {
+                    e.preventDefault(); // Prevent the form from submitting
+
+                    // Display the error message
+                    errorContainer.innerHTML = '<div class="alert alert-danger mt-4">End time must be after start time</div>';
+
+                    // Optionally, you can scroll to the error message for better visibility
+                    errorContainer.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                } else {
+                    // Clear the error message when the selection is valid
+                    errorContainer.innerHTML = '';
                 }
             });
         </script>

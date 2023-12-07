@@ -61,8 +61,8 @@
                 },
                 body: JSON.stringify({
                     to: userEmail,
-                    subject: 'OTP from Online Tutor App',
-                    body: 'Your verification code is: ' + otp
+                    subject: 'Authentication code from Tutoring Everywhere',
+                    body: 'Your two factor authentication code is: ' + otp
                 })
             })
             .then(response => response.text())
